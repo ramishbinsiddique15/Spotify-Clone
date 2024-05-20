@@ -354,6 +354,9 @@ body {
     flex-direction: column;
     gap: 3px;
   }
+  .play{
+    display: none;
+  }
 }
 @media (max-width: 1024px) {
   .playlist .cardContainer {
