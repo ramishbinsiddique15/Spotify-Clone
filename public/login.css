@@ -159,7 +159,7 @@ input:hover {
   outline: 0;
   border: 0;
   cursor: pointer;
-  transition: 500ms width ,500ms height;
+  transition: 500ms width, 500ms height;
 }
 .login:hover {
   width: 330px;
@@ -279,13 +279,19 @@ footer {
   align-items: center;
   justify-content: center;
   position: relative;
-  bottom: 0;}
+  bottom: 0;
+}
 
 .footer a {
   color: rgb(167, 167, 167);
   font-size: 11px;
 }
-
+.errorMessage{
+  color: red;
+  font-size: 12px;
+  margin: 0px 0px 0px 8px;
+font-size: larger;
+}
 @media (max-width: 768px) {
   .main {
     padding: 0;
@@ -348,9 +354,9 @@ footer {
     margin: 1rem;
     justify-content: space-between;
   }
- footer{
-  max-width: fit-content;
- }
+  footer {
+    max-width: fit-content;
+  }
   footer p {
     text-align: center;
   }

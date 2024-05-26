@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="login.css" />
     <title>SignUp - Spotify</title>
+  <link rel="icon" href="img/favicon.ico">
 </head>
 
 <body>
@@ -42,19 +43,19 @@
                 <label for="First Name">
                     <span class="label">First Name</span>
                 </label>
-                <input class="box" type="text" name="firstname" id="fname" placeholder="First Name">
+                <input class="box" type="text" name="firstname" id="fname" placeholder="First Name" required>
             </div>
             <div class="inputs">
                 <label for="Last Name">
                     <span class="label">Last Name</span>
                 </label>
-                <input class="box" type="text" name="lastname" id="lname" placeholder="Last Name">
+                <input class="box" type="text" name="lastname" id="lname" placeholder="Last Name" required>
             </div>
             <div class="inputs">
                 <label for="email or username">
                     <span class="label">Email</span>
                       </label>
-                <input class="box" type="text" name="email" id="email" placeholder="Email">
+                <input class="box" type="text" name="email" id="email" placeholder="Email" required>
             </div>
 
             <div class="inputs">
@@ -62,7 +63,7 @@
                     <span class="label">Password</span>
                 </label>
                 <div class="pass">
-                    <input class="box" type="password" name="password" id="password" placeholder="Password">
+                    <input class="box" type="password" name="password" id="password" placeholder="Password" required>
                     <div id="eye-icon-box"><img src="img/eye-slash-svgrepo-com.svg" alt="hide" id="eye-icon"
                             onclick="pass()"></div>
                 </div>
@@ -82,17 +83,12 @@
                 <button type="submit" class="login">Sign Up</button>
             </div>
         </form>
-            <div class="reset">
-                <a href="#">
-                    <p>Forget Your Password?</p>
-                </a>
-            </div>
 
             <hr class="line line1">
 
             <div class="signup">
                 <span class="grey-text">Already Signed in?</span>
-                <a href="login.html"><span class="text-white">Log in for Spotify</span></a>
+                <a href="/"><span class="text-white">Log in for Spotify</span></a>
             </div>
         </div>
 

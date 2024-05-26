@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/login.css" />
+  <link rel="icon" href="img/favicon.ico">
     <title>Login - Spotify</title>
 </head>
 
@@ -14,7 +15,10 @@
     </nav>
     <div class="main">
         <div class="container">
-            <!-- <img src="img/logo.svg" alt="logo" class="logo1" />
+            <img src="img/logo.svg" alt="logo" class="logo1" />
+            <% if (errorMessage) { %>
+                <p class="errorMessage"><%= errorMessage %></p>
+              <% } %>
             <h1>Log in to Spotify</h1>
             <ul>
                 <li>
@@ -35,7 +39,7 @@
                 </li>
                 </li>
             </ul>
-            <hr class="line"> -->
+            <hr class="line">
             <form action="/login" method="post">
             <div class="inputs">
                 <label for="email">
@@ -68,6 +72,7 @@
             <div class="btn">
                 <button type="submit" class="login">Log In</button>
             </div>
+
         </form>
             <div class="reset">
                 <a href="#">
@@ -94,7 +99,7 @@
         </div>
     </footer>
 
-    <script src="login.js"></script>
+    <script src="/login.js"></script>
 
 </body>
 

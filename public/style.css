@@ -295,7 +295,31 @@ body {
   justify-content: center;
   align-items: center;
 }
-
+.popup{
+  background-color: black;
+  position: fixed;
+    top: 10%;
+    transition: all 0.3s;
+    z-index: 1;
+    width: 100px;
+    height: 50px;
+    padding: 0px;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 5px 20px;
+  transition: 0.3s ease-in-out;
+  display: none;
+  gap: 10px;
+}
+#settings{
+  cursor: pointer;
+}
+.logout{
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  color: red;
+}
 @media (max-width: 1152px) {
   .left {
     position: fixed;
