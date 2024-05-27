@@ -76,7 +76,7 @@ app.get("/getNasheeds/:folder", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.render("login");
+  res.render("login",{errorMessage: ""});
 });
 app.get("/login", (req, res) => {
   res.render("login");
@@ -106,7 +106,6 @@ app.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
     data.password = hashedPassword;
     const userData = await collection.insertMany(data);
-    console.log(userData);
     res.render("login",{errorMessage: "User created successfully"});
   }
 });
@@ -115,7 +114,6 @@ let user = {}; // Changed from const to let
 app.post("/login", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log("Received login request for email:", email);
   user = await collection.findOne({ email: email });
   if (user) {
     const validPassword = await bcrypt.compare(password, user.password);
@@ -130,7 +128,6 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/delete", async (req, res) => {
-  console.log(user.email);
   await collection.deleteOne({
     email: user.email,
   });
