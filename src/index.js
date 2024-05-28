@@ -5,11 +5,59 @@ const fs = require("fs").promises;
 const collection = require("./config");
 const app = express();
 const port = 5000;
-
+const bodyParser = require("body-parser");
+// let dataObj = []
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+app.post('/database', async (req, res, next) => {
+  // console.log(req.body);
+  let obj = req.body
+  
+  let data = await collection.findOne({ firstname: req.body.firstname })
+  if(data) {
+    let del = await collection.deleteOne({ firstname: req.body.firstname })
+    res.redirect('/index');
+    res.send();
+  } else { 
+      collection.insertMany(req.body);  
+      res.redirect('/index');
+  }
+  // console.log(data)
+})
+
+// Middleware to parse cookies
+function parseCookies(cookieHeader) {
+  const list = {};
+  if (!cookieHeader) return list;
+
+  cookieHeader.split(';').forEach(cookie => {
+    let [name, ...rest] = cookie.split('=');
+    name = name?.trim();
+    if (!name) return;
+    const value = rest.join('=').trim();
+    if (!value) return;
+    list[name] = decodeURIComponent(value);
+  });
+  return list;
+}
+
+// Middleware to check login status
+app.use((req, res, next) => {
+  const cookies = parseCookies(req.headers.cookie);
+  req.isLoggedIn = cookies.user ? true : false;
+  req.userEmail = cookies.user || null;
+
+  // Set no-cache headers
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Pragma', 'no-cache');
+  next();
+});
 
 // Function to read info.json file
 async function readInfoFile(folderPath) {
@@ -76,14 +124,22 @@ app.get("/getNasheeds/:folder", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.render("login",{errorMessage: ""});
+  res.render("login", { errorMessage: "" });
 });
+
 app.get("/login", (req, res) => {
   res.render("login");
 });
 
-app.get("/index", (req, res) => {
-  res.render("index");
+app.get("/index", async (req, res) => {
+  if (req.isLoggedIn) {
+    // let data = await collection.findOne({ firstname: "Halal Beats" })
+    // if(data) {
+    res.render("index")
+  //  }
+  } else {
+    res.render("login", { errorMessage: "Please log in to access the index page" });
+  }
 });
 
 app.get("/signup", (req, res) => {
@@ -100,43 +156,48 @@ app.post("/signup", async (req, res) => {
 
   const existingUser = await collection.findOne({ email: data.email });
   if (existingUser) {
-    res.render("login",{errorMessage: "User already exists"});
+    res.render("login", { errorMessage: "User already exists" });
   } else {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
     data.password = hashedPassword;
-    const userData = await collection.insertMany(data);
-    res.render("login",{errorMessage: "User created successfully"});
+    await collection.insertMany(data);
+    res.render("login", { errorMessage: "User created successfully" });
   }
 });
-let user = {}; // Changed from const to let
 
 app.post("/login", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  user = await collection.findOne({ email: email });
+  const user = await collection.findOne({ email: email });
   if (user) {
     const validPassword = await bcrypt.compare(password, user.password);
     if (validPassword) {
+      res.setHeader('Set-Cookie', `user=${email}; HttpOnly; Path=/`);
       res.redirect("/index");
     } else {
-      res.render("login", { errorMessage: "Invalid password" }); // Render login page with error message
+      res.render("login", { errorMessage: "Invalid password" });
     }
   } else {
-    res.render("login", { errorMessage: "Incorrect Email or Password" }); // Render login page with error message
+    res.render("login", { errorMessage: "Incorrect Email or Password" });
   }
 });
 
 app.get("/delete", async (req, res) => {
-  await collection.deleteOne({
-    email: user.email,
-  });
-  res.render("login",{errorMessage: "User deleted successfully"});
-}      
-);
-app.get("/logout", (req, res) => {
-  res.render("login",{errorMessage: "Logged out successfully"});
+  if (req.isLoggedIn) {
+    await collection.deleteOne({ email: req.userEmail });
+    res.setHeader('Set-Cookie', 'user=; HttpOnly; Path=/; Max-Age=0');
+    res.render("signup")
+  } else {
+    res.render("login", { errorMessage: "No user logged in" });
+  }
 });
+
+app.get("/logout", (req, res) => {
+  res.setHeader('Set-Cookie', 'user=; HttpOnly; Path=/; Max-Age=0');
+  res.render("login", { errorMessage: "Logged out successfully" });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

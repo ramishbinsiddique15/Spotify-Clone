@@ -320,6 +320,11 @@ body {
   border: none;
   color: red;
 }
+.btn{
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
 @media (max-width: 1152px) {
   .left {
     position: fixed;
