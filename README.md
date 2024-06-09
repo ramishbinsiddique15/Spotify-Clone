@@ -27,3 +27,6 @@ This project uses MongoDB for data storage. Ensure you have MongoDB installed an
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any changes.
+
+## Contact
+For any inquiries or feedback, you can reach out to me at [ramishbinsiddique24@gmail.com]
