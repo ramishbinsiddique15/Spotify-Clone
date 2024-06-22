@@ -55,26 +55,26 @@ async function displayAlbums() {
     const data = await response.json();
     const cardContainer = document.querySelector(".cardContainer");
     cardContainer.innerHTML = "";
-    data.albums.forEach((album) => { 
+    data.albums.forEach((album, index) => {
+      const heartId = `heart-${index}`; // Unique ID for each heart icon
+      const isRed = localStorage.getItem(heartId) === 'true'; // Check if the heart icon should be red
+
       cardContainer.innerHTML += `
         <div data-folder="${album.folder}" class="card rounded">
-        <form action="/database" method="post">
-        <input type="hidden" name="firstname" value="${album.folder}">
-        <input type="hidden" name="lastname" value="${album.title}">
-        <input type="hidden" name="email" value="${album.description}">
-        <input type="hidden" name="password" value="${album.cover}">
-        <button type="submit" id="btn" class="btn">
-    <svg class="invert heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
-        <path d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-    </svg>
-</button>
-
-       </form>
-    
+          <form action="/database" method="post">
+            <input type="hidden" name="firstname" value="${album.folder}">
+            <input type="hidden" name="lastname" value="${album.title}">
+            <input type="hidden" name="email" value="${album.description}">
+            <input type="hidden" name="password" value="${album.cover}">
+            <button type="submit" id="btn" class="btn">
+              <svg id="${heartId}" class="heart-icon ${isRed ? '' : 'invert'}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="${isRed ? 'red' : 'none'}" stroke="${isRed ? 'red' : 'currentColor'}">
+                <path d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </button>
+          </form>
 
           <div class="play">
-            <svg class="heart" width="16px" height="16px" viewBox="-0.5 0 8 8" version="1.1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink">
+            <svg class="heart" width="16px" height="16px" viewBox="-0.5 0 8 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>play [#1001]</title>
               <desc>Created with Sketch.</desc>
               <defs></defs>
@@ -94,6 +94,7 @@ async function displayAlbums() {
           </div>
         </div>`;
     });
+
     document.querySelectorAll(".card").forEach((card) => {
       card.addEventListener("click", async () => {
         Nasheeds = await getNasheeds(card.dataset.folder);
@@ -102,10 +103,31 @@ async function displayAlbums() {
         }
       });
     });
+
+    document.querySelectorAll(".heart-icon").forEach((heartIcon) => {
+      heartIcon.addEventListener("click", (event) => {
+        event.stopPropagation(); // Prevent the card click event from triggering
+        const heartId = heartIcon.id;
+        heartIcon.classList.toggle("invert");
+        const isRed = !heartIcon.classList.contains("invert");
+        localStorage.setItem(heartId, isRed); // Save the state to localStorage
+
+        if (isRed) {
+          heartIcon.style.fill = "red";
+          heartIcon.style.stroke = "red";
+        } else {
+          heartIcon.style.fill = "none";
+          heartIcon.style.stroke = "currentColor";
+        }
+      });
+    });
   } catch (error) {
     console.error("Error fetching albums:", error);
   }
 }
+
+
+
 
 // Function to play a nasheed
 const playMusic = (track, pause = false) => {

@@ -199,7 +199,6 @@ a:hover {
   border: solid 1px grey;
   border-radius: 4px;
   color: rgb(255, 255, 255);
-  transition: 500ms border;
 }
 .pass input {
   border: 0;
@@ -293,6 +292,7 @@ footer {
 font-size: larger;
 }
 @media (max-width: 768px) {
+  
   .main {
     padding: 0;
     width: 100%;
