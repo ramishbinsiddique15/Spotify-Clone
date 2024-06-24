@@ -159,11 +159,10 @@ input:hover {
   outline: 0;
   border: 0;
   cursor: pointer;
-  transition: 500ms width, 500ms height;
+  transition: 0.3s all ease-in-out;
 }
 .login:hover {
-  width: 330px;
-  height: 50px;
+  transform: scale(1.05);
 }
 a {
   color: white;

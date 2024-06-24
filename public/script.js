@@ -56,8 +56,8 @@ async function displayAlbums() {
     const cardContainer = document.querySelector(".cardContainer");
     cardContainer.innerHTML = "";
     data.albums.forEach((album, index) => {
-      const heartId = `heart-${index}`; // Unique ID for each heart icon
-      const isRed = localStorage.getItem(heartId) === 'true'; // Check if the heart icon should be red
+      const heartId = `heart-${index}`; 
+      const isRed = localStorage.getItem(heartId) === 'true'; 
 
       cardContainer.innerHTML += `
         <div data-folder="${album.folder}" class="card rounded">
@@ -110,7 +110,7 @@ async function displayAlbums() {
         const heartId = heartIcon.id;
         heartIcon.classList.toggle("invert");
         const isRed = !heartIcon.classList.contains("invert");
-        localStorage.setItem(heartId, isRed); // Save the state to localStorage
+        localStorage.setItem(heartId, isRed); 
 
         if (isRed) {
           heartIcon.style.fill = "red";
